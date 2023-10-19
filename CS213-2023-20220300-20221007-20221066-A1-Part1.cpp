@@ -4,7 +4,7 @@
 // Author1 and ID and Group:	mohamed ali saed  20220300 mahamedali.study@gmail.com
 // Author2 and ID and Group:	Ahmed Rabie Ahmed 20221007 a.rabie.ahmed@gmail.com
 // Author3 and ID and Group:	Ziad Tawfik AbdElNabi 20221066 ziadtawfik2003@gmail.com
-
+// 
 // Purpose:apply  filters to photo
 
 #include <iostream>
