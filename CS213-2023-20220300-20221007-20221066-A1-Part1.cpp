@@ -32,8 +32,10 @@ void Enlarge_Image();
 void Detect_Image_Edges();
 void shrink();
 void Mirror_Image ();
+void Blur_Image();
 void Crop_Image();
-void Skew_Horizontally_Vertically();
+void Skew_Horizontally();
+void Skew_Vertically();
 
 
 
@@ -54,7 +56,7 @@ int main()
           "9-shrink\n"
           "10-Mirror Image\n"
           "11-Shuffle Image\n"
-          "12-Blur Image"
+          "12-Blur Image\n"
           "13-Crop Image\n"
           "14-Skew Horizontally \n"
           "15-Skew Vertically\n"
@@ -92,22 +94,22 @@ int main()
                     shrink();
                     break;
                 case 10:
-                    Mirror_Image ();
+                    Mirror_Image();
                     break;
                 case 11:
                     Shuffle_Image();
                     break;
                 case 12:
-
+                    Blur_Image();
                     break;
                 case 13:
                     Crop_Image();
                     break;
                 case 14:
-                    Skew_Horizontally_Vertically();
+                    Skew_Horizontally();
                     break;
                 case 15:
-                    //Skew_Vertically();
+                    Skew_Vertically();
                     break;
                 case 16:
                     saveImage ();
@@ -128,9 +130,9 @@ int main()
               "9-shrink\n"
               "10-Mirror Image\n"
               "11-Shuffle Image\n"
-              "12-Blur Image"
+              "12-Blur Image\n"
               "13-Crop Image\n"
-              "14-Skew Horizontally \n"
+              "14-Skew Horizontally\n"
               "15-Skew Vertically\n"
               "16-Save the image to a file\n"
               "0-Exit\n";
@@ -217,7 +219,7 @@ void Flip_Image(){
     }
     // after user choose h or v we loop and make pixel down up and so on
     char c;cout<<"Flip (h)orizontally or (v)ertically ?: ";cin>>c;
-    if(c=='h'){
+    if(c=='v'){
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j< SIZE; j++) {
                 image[i][j] = cimage[i][SIZE-j-1];
@@ -428,79 +430,71 @@ void shrink() {
         }
     }
 }
-
 //_________________________________________(10)__________________________________________________________________________
-
 void Mirror_Image(){
     cout << "Enter (u) to mirror the upper half , Enter (d) to lower half , Enter (r) to right half and (l) to lift half : \n";
     char c;
     cin >> c; // we take the type of operations the user want
+    // make copy of the image
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j< SIZE; j++) {
+            cimage[i][j] = image[i][j];
+        }
+    }
     if (c == 'd') {
-        for (int i = SIZE / 2; i < SIZE; ++i) {
-            for (int j = 0; j < SIZE; ++j) {
-                another_image[i][j] = image[i][j];
-                // we save half of the image in another image
+        // we use the Flip function
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j< SIZE; j++) {
+                image[i][j] = cimage[SIZE-i-1][j];
             }
         }
-        // we use the Flip function that already made and give it the value we need
-        Flip('V');
         for (int i = SIZE / 2; i < SIZE; ++i) {
             for (int j = 0; j < SIZE; ++j) {
-                image[i][j] = another_image[i][j];
+                image[i][j] = cimage[i][j];
                 // reuse  the saved half of the image
             }
         }
     }
     else if (c == 'u') {
-        for (int i = 0; i < SIZE / 2; ++i) {
-            for (int j = 0; j < SIZE; ++j) {
-                another_image[i][j] = image[i][j];
+        //Flip('V');
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j< SIZE; j++) {
+                image[i][j] = cimage[SIZE-i-1][j];
             }
         }
-        Flip('V');
         for (int i = 0; i < SIZE / 2; ++i) {
             for (int j = 0; j < SIZE; ++j) {
-                image[i][j] = another_image[i][j];
+                image[i][j] = cimage[i][j];
             }
         }
     }
     else if (c == 'r') {
-        for (int i = 0; i < SIZE; ++i) {
-            for (int j = SIZE / 2; j < SIZE; ++j) {
-                another_image[i][j] = image[i][j];
+          //Flip('H');
+            for (int i = 0; i < SIZE; i++) {
+                for (int j = 0; j< SIZE; j++) {
+                    image[i][j] = cimage[i][SIZE-j-1];
+                }
             }
-        }
-        Flip('H');
         for (int i = 0; i < SIZE; ++i) {
             for (int j = (SIZE / 2); j < SIZE; ++j) {
-                image[i][j] = another_image[i][j];
+                image[i][j] = cimage[i][j];
             }
         }
     }
     else if(c=='l'){
-        for (int i = 0; i < SIZE; ++i) {
-            for (int j = 0; j < SIZE / 2; ++j) {
-                another_image[i][j] = image[i][j];
-            }
-        }
-        Flip('H');
-        for (int i = 0; i < SIZE; ++i) {
-            for (int j = 0; j < SIZE / 2; ++j) {
-                image[i][j] = another_image[i][j];
-            }
-        }
-    }
-}
-
-
-
-/*
- for (int i = 0; i < SIZE; i++) {
+        //Flip('H');
+        for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j< SIZE; j++) {
                 image[i][j] = cimage[i][SIZE-j-1];
             }
         }
-  */
+        for (int i = 0; i < SIZE; ++i) {
+            for (int j = 0; j < SIZE / 2; ++j) {
+                image[i][j] = cimage[i][j];
+            }
+        }
+    }
+}
 //_________________________________________(11)__________________________________________________________________________
 void Shuffle_Image(){
 
@@ -600,8 +594,32 @@ void Shuffle_Image(){
 
 }
 //_________________________________________(12)_________________________________________________________________________
+void Blur_Image(){
+
+
+    for (int i = 0; i < SIZE   ; i++) {
+        for (int j = 0; j < SIZE  ;  j++) {
+            int sum = 0,cnt= 0;
+            // the following loop takes a (9 * 9) square metrics of pixels
+            for (int k = -3; k < 4; ++k) {
+                for (int l = -3; l < 4; ++l) {
+                    if (i + k < 0 || i + k > SIZE- 1 || j +l < 0 || j +l > SIZE-1)
+                        continue;
+                    sum += image[i+k][j+l];
+                    cnt++;
+                }
+            }
+            cimage[i][j] = sum / cnt;
+        }
+    }
+    for (int i = 0 ; i < 256; i++) {
+        for (int j = 0 ; j< 256; j++) {
+            image[i][j] = cimage[i][j];
+        }
+    }
+
+}
 //_________________________________________(13)_________________________________________________________________________
-//_________________________________________(14)_________________________________________________________________________
 void Crop_Image(){
     int x,y,l,m;
     cout<<"cin x , y , l and m :";cin>>x>>y>>l>>m;
@@ -622,16 +640,21 @@ void Crop_Image(){
         }
     }
 }
-//_________________________________________(15)_________________________________________________________________________
-void Skew_Horizontally_Vertically(){
+//_________________________________________(14)_________________________________________________________________________
+void Skew_Horizontally(){
+    double dd,angel,d,dx;
+    cout<<"cin angle : ";
+    cin>>angel;
+    int re,jj=0;
+    angel = angel * (M_PI/180);
+    //angel = ( angel * 22 ) / ( 180 * 7 ) ;
+    //re = 1/(1+(1/tan(angel)));
+    d =  (tan(angel)*256);
+    dd = d;
+    dx = d/SIZE;
+    double y=(dd+SIZE)/SIZE;
 
-    double d,dx;cin>>d;
-    int re;
-    int sum_pixel;
-    d = ( d * 22 ) / ( 180 * 7 ) ;
-    re = (1+(1/tan(d)));
-    d = tan(d)*256;
-    dx = d/256;
+
 
     unsigned char img_big[SIZE][SIZE+(int)d]  ;
     for ( int i = 0 ; i < SIZE ; i++ ){
@@ -639,70 +662,66 @@ void Skew_Horizontally_Vertically(){
             img_big[i][j] = 255 ;
         }
     }
-
-//    for ( int i = 0 ; i < SIZE ; i++ ){
-//        for ( int j = 0 ; j < SIZE ; j++ ){
-//            img_big[i][j+(int)d] = image[i][j] ;
-//        }
-//        d -= dx ;
-//    }
-
-    for (int i = 0; i < 256; ++i) {
-        for (int j = 0; j < 256; ++j) {
-            cimage[i][j] = 255;
+ //shift
+    for ( int i = 0 ; i < SIZE ; i++ ){
+        for ( int j = 0 ; j < SIZE ; j++ ){
+            img_big[i][j+(int)d] = image[i][j] ;
         }
+        d -= dx ;
     }
+
 
     for ( int i = 0 ; i < SIZE ; i++ ){
-        for ( int j = 0 ; j < SIZE; j++ ){
-
-            cimage[i][j*re] =  image[i][j];
-
-        }
-    }
-    for (int i = 0; i < 256; ++i) {
-        for (int j = 0; j < 256; ++j) {
-            image[i][j] = cimage[i][j];
+        for ( int j = 0 ; j < SIZE+(int)dd; j++ ){
+            image[i][(int)(j/y)] =  img_big[i][j];
         }
     }
 
 
-
-
-    vector<vector<int>>visited(256,vector<int>(256));
-
-//        for (int i = 0; i < 256; ++i) {
-//            int u = 0;
-//            for (int j = 0; j < 256; ++j) {
-//                int ave =0;
-//                for(int jj = 0 ;jj<re ; jj++){
-//                    ave += (img_big[i][u] + img_big[i][u + 1])  / 2;
-//                    cimage[i][j] = ave;
-//                    visited[i][j] = 1;
-//                    u += 2;
-//                }
-//
-//
-//            }
-//
-//        }
-//    for (int i = 0; i < 256; ++i) {
-//        for (int j = 0; j < 256; ++j) {
-//            if (!visited[i][j])
-//                cimage[i][j] = 255;
-//        }
-//    }
-//    for (int i = 0; i < 256; ++i) {
-//        for (int j = 0; j < 256; ++j) {
-//            image[i][j] = cimage[i][j];
-//        }
-//    }
-// hello 
 
 }
+//_________________________________________(15)_________________________________________________________________________
+void Skew_Vertically(){
+        double dd,angel,d,dx;
+        cout<<"cin angle : ";
+        cin>>angel;
+        int re,jj=0;
+        angel = angel * (M_PI/180);
+        d =  (tan(angel)*256);
+        dd = d;
+        dx = d/SIZE;
+        double y=(dd+SIZE)/SIZE;
+
+        unsigned char img_big[SIZE+(int)d][SIZE] ;
+        for ( int i = 0 ; i < SIZE+d ; i++ ){
+            for ( int j = 0 ; j < SIZE ; j++ ){
+                img_big[i][j] = 255 ;
+            }
+        }
+        //shift
+        for ( int i = 0 ; i < SIZE ; i++ ){
+            for ( int j = 0 ; j < SIZE ; j++ ){
+                img_big[(int)(j+d)][i] = image[j][i] ;
+            }
+            d -= dx ;
+        }
 
 
 
+    for (int i = 0; i < SIZE+(int)dd; ++i) {
+        for (int j = 0; j < SIZE; ++j) {
+            double x=(i/y);
+            image[(int)x][j]=img_big[i][j];
+        }
+    }
+//        for ( int i = 0 ; i < SIZE+(int)dd ; i++ ){
+//            for ( int j = 0 ; j < SIZE; j++ ){
+//                double time= i/y;
+//                image[(int)(time)][j] =  img_big[i][j];
+//            }
+//        }
 
 
+
+}
 
